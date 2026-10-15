@@ -1,0 +1,25 @@
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Logs and build artifacts
+*.log
+dist/
+build/
+bin/
+obj/
+
+# Environments and dependencies
+.env
+.env.local
+node_modules/
+__pycache__/
+*.pyc
+venv/
+.venv/
+
+# Editor configurations
+.vscode/
+.idea/
+*.swp
+*.swo
