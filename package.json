@@ -1,21 +1,25 @@
 {
-  "name": "@muhammadtaaha365-arch/devops-pipeline",
+  "name": "@Samianadeem2005/devops-pipeline",
   "version": "1.1.1",
-  "description": "Markdown to HTML build automation for DevOps Lab 05",
+  "description": "Renders the course Markdown sources into HTML pages.",
   "main": "tools/build.js",
+  "directories": {
+    "test": "test"
+  },
   "scripts": {
-    "test": "node test/build.test.js"
+    "build": "node tools/build.js",
+    "test": "node --test"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "bin": {
+    "devops-build": "tools/build.js"
+  },
   "files": [
     "tools/",
     "README.md"
   ],
-  "bin": {
-    "devops-build": "tools/build.js"
-  },
   "dependencies": {
     "markdown-it": "^15.0.3"
   },
