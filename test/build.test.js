@@ -25,3 +25,5 @@ test('no page is empty (zero-byte build failure)', () => {
     assert.ok(stats.size > 0, `page ${p} is empty (0 bytes)`);
   }
 });
+
+test('this always fails', () => assert.ok(false));
