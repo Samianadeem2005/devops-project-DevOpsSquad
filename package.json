@@ -21,7 +21,6 @@
     "README.md"
   ],
   "dependencies": {
-    "js-yaml": "^4.1.0",
     "markdown-it": "^15.0.3"
   },
   "repository": {
