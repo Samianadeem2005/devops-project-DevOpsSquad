@@ -1,39 +1,28 @@
-SRC_DIR := src
-OUT_DIR := out
-SOURCES := $(wildcard $(SRC_DIR)/*.md)
-OUTPUTS := $(patsubst $(SRC_DIR)/%.md,$(OUT_DIR)/%.html,$(SOURCES))
+.PHONY: hello deps check build test package clean ci
 
-.PHONY: all deps check build test clean package ci
+hello:
+	@echo "Hello from Make"
 
-all: test
+deps: node_modules
 
-$(OUT_DIR):
-	mkdir -p $(OUT_DIR)
-
-node_modules: package-lock.json
+node_modules: package.json package-lock.json
 	npm ci
-	@touch node_modules
-
-deps: node_modules ## install exactly what the lock file says
-
-$(OUT_DIR)/%.html: $(SRC_DIR)/%.md package-lock.json | $(OUT_DIR) node_modules
-	@echo " BUILD $< -> $@"
-	@npm run --silent build -- $< $@
+	touch node_modules
 
 check:
-	@if [ ! -d "$(SRC_DIR)" ] || [ -z "$(SOURCES)" ]; then \
-		echo "ERROR: no .md files found in $(SRC_DIR)" >&2; exit 1; \
-	fi
+	npm ls --all
 
-build: $(OUTPUTS)
+build: deps
+	node tools/build.js src out
 
-test: build ## run the test suite against what was built
-	@npm test --silent
+test: build
+	node test/build.test.js
 
-package: test ## produce the versioned artifact
+package: test
 	npm pack
 
-clean: ## remove all generated files
-	rm -rf $(OUT_DIR) *.tgz
+clean:
+	rm -rf out *.tgz
 
-ci: clean deps check test package ## the build server entry point
+ci: clean deps check test package
+	@echo "CI pipeline passed successfully!"
