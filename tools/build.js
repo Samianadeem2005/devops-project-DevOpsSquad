@@ -1,38 +1,24 @@
 #!/usr/bin/env node
-// Render every Markdown file in a source directory into an HTML page.
+// tools/build.js — renders one Markdown source into one HTML page.
+// Called by the Makefile:  npm run build -- src/notes.md out/notes.html
 const fs = require('fs');
 const path = require('path');
 const MarkdownIt = require('markdown-it');
 
-const [srcDir, destDir] = process.argv.slice(2);
-
-if (!srcDir || !destDir) {
-  console.error('usage: build.js <source-directory> <destination-directory>');
-  process.exit(2);
-}
-
-if (!fs.existsSync(srcDir) || !fs.statSync(srcDir).isDirectory()) {
-  console.error(`Source directory does not exist: ${srcDir}`);
+const [src, dest] = process.argv.slice(2);
+if (!src || !dest) {
+  console.error('usage: build.js <source.md> <dest.html>');
   process.exit(2);
 }
 
 const md = new MarkdownIt({ html: false, linkify: true, typographer: true });
-const files = fs.readdirSync(srcDir).filter((file) => file.endsWith('.md'));
+const body = md.render(fs.readFileSync(src, 'utf8'));
+const title = path.basename(src, '.md');
 
-fs.mkdirSync(destDir, { recursive: true });
-
-for (const file of files) {
-  const sourcePath = path.join(srcDir, file);
-  const destPath = path.join(destDir, file.replace(/\.md$/, '.html'));
-  const body = md.render(fs.readFileSync(sourcePath, 'utf8'));
-  const title = path.basename(file, '.md');
-
-  fs.writeFileSync(destPath, `<!doctype html>
+fs.mkdirSync(path.dirname(dest), { recursive: true });
+fs.writeFileSync(dest, `<!doctype html>
 <html lang="en">
 <meta charset="utf-8">
 <title>${title}</title>
 ${body}</html>
 `);
-
-  console.log(`BUILD ${sourcePath} -> ${destPath}`);
-}
