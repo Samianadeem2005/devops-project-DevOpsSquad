@@ -1,3 +1,4 @@
+
 name: CI
 
 on:
@@ -11,8 +12,17 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+
       - name: Build, test and package
         run: make ci
+
+      - name: Upload pipeline artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: devops-pipeline
+          path: '*.tgz'
+          if-no-files-found: error
