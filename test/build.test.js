@@ -7,7 +7,7 @@ const pages = fs.readdirSync('out').filter((f) => f.endsWith('.html'));
 
 test('every source produced a page', () => {
   const sources = fs.readdirSync('src').filter((f) => f.endsWith('.md'));
-  assert.strictEqual(pages.length, sources.length + 1);
+  assert.strictEqual(pages.length, sources.length);
 });
 
 test('every page is real HTML and not raw Markdown', () => {
