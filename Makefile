@@ -3,7 +3,7 @@ OUT_DIR := out
 SOURCES := $(wildcard $(SRC_DIR)/*.md)
 OUTPUTS := $(patsubst $(SRC_DIR)/%.md,$(OUT_DIR)/%.html,$(SOURCES))
 
-.PHONY: all deps check build test clean package ci
+.PHONY: all deps check lint build test clean package ci
 
 all: test
 
@@ -25,6 +25,9 @@ check:
 		echo "ERROR: no .md files found in $(SRC_DIR)" >&2; exit 1; \
 	fi
 
+lint: node_modules ## static analysis: seconds, so it runs first
+	npm run --silent lint
+
 build: $(OUTPUTS)
 
 test: build ## run the test suite against what was built
@@ -36,4 +39,4 @@ package: test ## produce the versioned artifact
 clean: ## remove all generated files
 	rm -rf $(OUT_DIR) *.tgz
 
-ci: clean deps check test package ## the build server entry point
+ci: clean deps check lint test package ## everything, in pipeline order
