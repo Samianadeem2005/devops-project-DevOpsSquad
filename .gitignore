@@ -25,4 +25,5 @@ venv/
 *.swo
 node_modules/
 out/
+coverage/
 *.tgz

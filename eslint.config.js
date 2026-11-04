@@ -7,3 +7,4 @@ module.exports = [
   js.configs.recommended,
   { languageOptions: { sourceType: 'commonjs', globals: globals.node } },
 ];
+
